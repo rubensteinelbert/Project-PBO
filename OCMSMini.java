@@ -1,4 +1,4 @@
-package test.ocms.mini;
+package ocms.mini;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -216,16 +216,18 @@ public class OCMSMini {
         }
 
         int pilihKategori;
-        while (true) {
-            System.out.print("Masukkan nomor kategori: ");
-            pilihKategori = scanner.nextInt();
-            scanner.nextLine();
-
-            if (pilihKategori >= 1 && pilihKategori <= kategori.length) {
-                break;
-            }
-            System.out.println("Pilihan kategori tidak valid. Silakan pilih 1-" + kategori.length + ".");
+    while (true) {
+    System.out.print("Masukkan nomor kategori: ");
+    try {
+        pilihKategori = Integer.parseInt(scanner.nextLine().trim());
+        if (pilihKategori >= 1 && pilihKategori <= kategori.length) {
+            break;
         }
+        System.out.println("Pilihan kategori tidak valid. Silakan pilih 1-" + kategori.length + ".");
+    } catch (NumberFormatException e) {
+        System.out.println("Input harus berupa angka.");
+    }
+}
         String kategoriDipilih = kategori[pilihKategori - 1];
 
 //parameter status 'dikirim' dihilangkan karena sudah ada sudah didefinisikan object class complain"
