@@ -1,20 +1,22 @@
-package ocms.mini;
+package test.ocms.mini;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+//Menambah class role user
 class Role {
     String userRole;
     String password;
-
+    
     Role(String userRole, String password) {
         this.userRole = userRole;
         this.password = password;
-    }
+    }           
 }
-
+    
+//Menambahkan variable remark
 class Complain {
     int id;
     String nama;
@@ -28,6 +30,8 @@ class Complain {
     String updateTerakhir;
     String selesai;
 
+//Parameter String status pada array dihilangkan
+//Menambah inisiasi remark = null        
     Complain(int id, String nama, String judul, String deskripsi, String kategori) {
         this.id = id;
         this.nama = nama;
@@ -42,58 +46,58 @@ class Complain {
 }
 
 public class OCMSMini {
-
+    
+//Menambahkan method roles dengan value terdefinisikan   
     static Role[] roles = {
         new Role("admin", "1234"),
         new Role("user", "")
     };
 
+//Mendefinisikan array kategori di luar main
+    static String[] kategori = {
+        "Infrastruktur",
+        "Elektrikal",
+        "IT & Sistem",
+        "Kebersihan",
+        "Fasilitas",
+        "Lainnya"
+    };
+    
     static Scanner scanner = new Scanner(System.in);
     static ArrayList<Complain> complains = new ArrayList<>();
-    static ArrayList<String> categories = new ArrayList<>();
 
     static int nextId = 1;
-
-    public static void main(String[] args) {
-        // Kategori default awal (bisa ditambah/dihapus oleh Admin)
-        categories.add("Fasilitas");
-        categories.add("Layanan");
-        categories.add("Administrasi");
-        categories.add("Teknis");
-
+    
+    public static void main(String[] args) {  
+        
+//Menambah calling method opsiStatus        
         opsiStatus();
     }
-
-    // Helper untuk membaca input angka dengan aman agar tidak crash jika diisi huruf
-    static int bacaAngka(String prompt) {
-        while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine().trim();
-            try {
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Input harus berupa angka. Silakan coba lagi.");
-            }
-        }
-    }
-
+        
     static void opsiStatus() {
         int opsiStatus;
         do {
-            System.out.println("===== Welcome to Online Complaint Management System =====");
+
+//Menambahkan method menu utama (inisiasi sebagai opsiStatus   
+//Menambahkan opsi 'keluar'
+            System.out.println("=====Welcome to Online Complaint Management System =====");
             System.out.println("Silakan masukkan status anda : ");
             System.out.println("1. Admin");
             System.out.println("2. User");
-            System.out.println("3. Keluar");
-
-            opsiStatus = bacaAngka("Pilih status: ");
-            System.out.println();
-
+            System.out.println("3. Keluar ");
+            
+            System.out.print("Pilih status: ");
+            opsiStatus = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("\n");
+            
+// menambah switch pilihan role/status user;
+//Menambahkan case 'keluar program'
             switch (opsiStatus) {
                 case 1 -> adminlogin();
                 case 2 -> dashboardUser();
                 case 3 -> {
-                    System.out.println("Terima kasih telah menggunakan aplikasi ini.");
+                    System.out.print("Terima kasih telah menggunakan aplikasi ini.");
                     System.exit(0);
                 }
                 default -> System.out.println("Pilihan tidak valid. Silakan coba lagi.\n");
@@ -101,6 +105,8 @@ public class OCMSMini {
         } while (opsiStatus != 3);
     }
 
+//menambah method login admin
+//Menambahkan opsi kembali ke halaman utama
     static void adminlogin() {
         while (true) {
             System.out.println("===== Admin Login =====");
@@ -111,18 +117,20 @@ public class OCMSMini {
 
             if (passwordInput.equals("0")) {
                 return;
-            }
+            } 
             if (passwordInput.equals(roles[0].password)) {
                 System.out.println("Password benar.\n");
                 dashboardAdmin();
                 return;
             } else {
                 System.out.println("Password salah.");
-                System.out.println("Silakan coba lagi.\n");
+                System.out.println("Silakan coba lagi.");
             }
         }
     }
 
+//Mengubah dashboard menjadi dashboard admin (all menu open)
+//Menambahkan opsi 'keluar program' dan 'kembali ke halaman utama'
     static void dashboardAdmin() {
         int pilihan;
         do {
@@ -132,42 +140,49 @@ public class OCMSMini {
             System.out.println("3. Cari Pengaduan");
             System.out.println("4. Update Pengaduan");
             System.out.println("5. Statistik Pengaduan");
-            System.out.println("6. Define Kategori");
-            System.out.println("7. Kembali ke menu utama");
-            System.out.println("8. Keluar");
+            System.out.println("6. Kembali ke menu utama");
+            System.out.println("7. Keluar");
 
-            pilihan = bacaAngka("Pilih menu: ");
-            System.out.println();
-
+            System.out.print("Pilih menu: ");
+            pilihan = scanner.nextInt();
+            scanner.nextLine(); 
+            
+            System.out.println("\n");
+            
             switch (pilihan) {
                 case 1 -> tambahPengaduan();
                 case 2 -> lihatPengaduan();
                 case 3 -> cariPengaduan();
                 case 4 -> updatePengaduan();
                 case 5 -> statistikPengaduan();
-                case 6 -> kelolaKategori();
-                case 7 -> { return; }
-                case 8 -> {
+                case 6 -> { return; }
+                case 7 -> {
                     System.out.println("Terima kasih telah menggunakan aplikasi ini.");
                     System.exit(0);
                 }
-                default -> System.out.println("Pilihan tidak valid. Silakan coba lagi.\n");
+                default -> System.out.println("Pilihan tidak valid. Silakan coba lagi.");
             }
-        } while (pilihan != 8);
+        } while (pilihan != 7);
     }
 
+//Menambah dashboard user reporter (menu terbatas)
+//Menambahkan opsi 'keluar program' dan 'kembali ke halaman utama'
     static void dashboardUser() {
         int pilihan;
         do {
             System.out.println("  === OCMS : User Dashboard ===");
+            
             System.out.println("0. Kembali");
             System.out.println("1. Buat Pengaduan");
             System.out.println("2. Lihat Pengaduan");
             System.out.println("3. Keluar");
 
-            pilihan = bacaAngka("Pilih menu: ");
-            System.out.println();
-
+            System.out.print("Pilih menu: ");
+            pilihan = scanner.nextInt();
+            scanner.nextLine(); 
+            
+            System.out.print("\n");
+            
             switch (pilihan) {
                 case 0 -> { return; }
                 case 1 -> tambahPengaduan();
@@ -176,91 +191,14 @@ public class OCMSMini {
                     System.out.println("Terima kasih telah menggunakan aplikasi ini.");
                     System.exit(0);
                 }
-                default -> System.out.println("Pilihan tidak valid. Silakan coba lagi.\n");
+                default -> System.out.println("Pilihan tidak valid. Silakan coba lagi.");
             }
         } while (pilihan != 3);
     }
 
-    // Fitur Define Category untuk Admin
-    static void kelolaKategori() {
-        int pilihan;
-        do {
-            System.out.println("===== Define / Kelola Kategori =====");
-            System.out.println("1. Lihat Daftar Kategori");
-            System.out.println("2. Tambah Kategori Baru");
-            System.out.println("3. Hapus Kategori");
-            System.out.println("0. Kembali ke Dashboard Admin");
-
-            pilihan = bacaAngka("Pilih aksi: ");
-            System.out.println();
-
-            switch (pilihan) {
-                case 1 -> {
-                    System.out.println("--- Daftar Kategori Saat Ini ---");
-                    if (categories.isEmpty()) {
-                        System.out.println("Belum ada kategori yang didefinisikan.");
-                    } else {
-                        for (int i = 0; i < categories.size(); i++) {
-                            System.out.println((i + 1) + ". " + categories.get(i));
-                        }
-                    }
-                    System.out.println();
-                }
-                case 2 -> {
-                    System.out.print("Masukkan nama kategori baru: ");
-                    String kategoriBaru = scanner.nextLine().trim();
-
-                    if (kategoriBaru.isEmpty()) {
-                        System.out.println("Nama kategori tidak boleh kosong.\n");
-                    } else {
-                        boolean sudahAda = false;
-                        for (String kat : categories) {
-                            if (kat.equalsIgnoreCase(kategoriBaru)) {
-                                sudahAda = true;
-                                break;
-                            }
-                        }
-
-                        if (sudahAda) {
-                            System.out.println("Kategori \"" + kategoriBaru + "\" sudah terdaftar.\n");
-                        } else {
-                            categories.add(kategoriBaru);
-                            System.out.println("Kategori \"" + kategoriBaru + "\" berhasil ditambahkan.\n");
-                        }
-                    }
-                }
-                case 3 -> {
-                    if (categories.isEmpty()) {
-                        System.out.println("Tidak ada kategori untuk dihapus.\n");
-                        break;
-                    }
-                    System.out.println("--- Pilih Kategori yang Akan Dihapus ---");
-                    for (int i = 0; i < categories.size(); i++) {
-                        System.out.println((i + 1) + ". " + categories.get(i));
-                    }
-                    int indeksHapus = bacaAngka("Nomor kategori (0 untuk batal): ");
-                    if (indeksHapus == 0) {
-                        System.out.println("Penghapusan dibatalkan.\n");
-                    } else if (indeksHapus >= 1 && indeksHapus <= categories.size()) {
-                        String dihapus = categories.remove(indeksHapus - 1);
-                        System.out.println("Kategori \"" + dihapus + "\" berhasil dihapus.\n");
-                    } else {
-                        System.out.println("Nomor kategori tidak valid.\n");
-                    }
-                }
-                case 0 -> { return; }
-                default -> System.out.println("Pilihan tidak valid. Silakan coba lagi.\n");
-            }
-        } while (pilihan != 0);
-    }
-
     static void tambahPengaduan() {
+        System.out.println("\n");
         System.out.println("===== Buat Pengaduan =====");
-
-        if (categories.isEmpty()) {
-            System.out.println("Kategori pengaduan belum tersedia. Silakan hubungi Admin untuk mendefinisikan kategori terlebih dahulu.\n");
-            return;
-        }
 
         System.out.print("Masukkan nama: ");
         String nama = scanner.nextLine();
@@ -271,30 +209,37 @@ public class OCMSMini {
         System.out.print("Masukkan deskripsi pengaduan: ");
         String deskripsi = scanner.nextLine();
 
+        // Loop menampilkan daftar kategori dari array kategori
         System.out.println("Pilih kategori pengaduan:");
-        for (int i = 0; i < categories.size(); i++) {
-            System.out.println((i + 1) + ". " + categories.get(i));
+        for (int i = 0; i < kategori.length; i++) {
+            System.out.println((i + 1) + ". " + kategori[i]);
         }
 
-        int pilihanKategori;
+        int pilihKategori;
         while (true) {
-            pilihanKategori = bacaAngka("Masukkan nomor kategori: ");
-            if (pilihanKategori >= 1 && pilihanKategori <= categories.size()) {
+            System.out.print("Masukkan nomor kategori: ");
+            pilihKategori = scanner.nextInt();
+            scanner.nextLine();
+
+            if (pilihKategori >= 1 && pilihKategori <= kategori.length) {
                 break;
             }
-            System.out.println("Nomor kategori tidak valid. Pilih antara 1 sampai " + categories.size() + ".");
+            System.out.println("Pilihan kategori tidak valid. Silakan pilih 1-" + kategori.length + ".");
         }
-        String kategori = categories.get(pilihanKategori - 1);
+        String kategoriDipilih = kategori[pilihKategori - 1];
 
-        Complain complain = new Complain(nextId, nama, judul, deskripsi, kategori);
+//parameter status 'dikirim' dihilangkan karena sudah ada sudah didefinisikan object class complain"
+        Complain complain = new Complain(nextId, nama, judul, deskripsi, kategoriDipilih);
+
         complains.add(complain);
-
+        
+//mengubah nextId++ menjadi nextId (menghilangkan ++)        
         System.out.println("\nPengaduan berhasil ditambahkan.");
         System.out.println("ID Pengaduan: " + nextId + "\n");
 
-        nextId++;
+        nextId++;        
     }
-
+    
     static void lihatPengaduan() {
         System.out.println("===== Lihat Pengaduan =====");
         if (complains.isEmpty()) {
@@ -308,20 +253,24 @@ public class OCMSMini {
                 System.out.println("Kategori: " + complain.kategori);
                 System.out.println("Status: " + complain.status);
                 System.out.println("Tanggal dibuat: " + complain.tanggaldibuat);
-                System.out.println("Update Terakhir: " + (complain.updateTerakhir != null ? complain.updateTerakhir : "-"));
-                System.out.println("Selesai: " + (complain.selesai != null ? complain.selesai : "-"));
+                System.out.println("Update Terakhir: " + complain.updateTerakhir);
+                System.out.println("Selesai: " + complain.selesai);
+//Menambahkan catatan (remark) pada status 'pending' dan 'ditolak'
                 if (complain.remark != null) {
                     System.out.println("Catatan: " + complain.remark);
                 }
                 System.out.println("-------------------------");
             }
         }
-        System.out.println();
+        System.out.println("\n");
     }
 
     static void cariPengaduan() {
+        System.out.println("\n");
         System.out.println("===== Cari Pengaduan =====");
-        int id = bacaAngka("Masukkan ID pengaduan: ");
+        System.out.print("Masukkan ID pengaduan: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); 
 
         boolean found = false;
         for (Complain complain : complains) {
@@ -333,27 +282,32 @@ public class OCMSMini {
                 System.out.println("Kategori: " + complain.kategori);
                 System.out.println("Status: " + complain.status);
                 System.out.println("Tanggal dibuat: " + complain.tanggaldibuat);
-                System.out.println("Update Terakhir: " + (complain.updateTerakhir != null ? complain.updateTerakhir : "-"));
-                System.out.println("Selesai: " + (complain.selesai != null ? complain.selesai : "-"));
+                System.out.println("Update Terakhir: " + complain.updateTerakhir);
+                System.out.println("Selesai: " + complain.selesai);
+//Menambahkan catatan (remark) pada status 'pending' dan 'ditolak' 
                 if (complain.remark != null) {
                     System.out.println("Catatan: " + complain.remark);
                 }
-                System.out.println("\n");
+                System.out.println("\n\n");
                 found = true;
                 break;
             }
         }
 
         if (!found) {
-            System.out.println("Pengaduan dengan ID " + id + " tidak ditemukan.\n");
+            System.out.println("Pengaduan dengan ID " + id + " tidak ditemukan.");
         }
     }
 
     static void updatePengaduan() {
+        System.out.println("\n");
         System.out.println("===== Update Pengaduan =====");
-        int id = bacaAngka("Masukkan ID pengaduan yang ingin diupdate: ");
-        System.out.println();
-
+        System.out.print("Masukkan ID pengaduan yang ingin diupdate: ");
+        int id = scanner.nextInt();
+        int statusBaru;
+        scanner.nextLine(); 
+        System.out.print("\n");
+            
         boolean found = false;
         for (Complain complain : complains) {
             if (complain.id == id) {
@@ -363,37 +317,42 @@ public class OCMSMini {
                 System.out.println("3. Selesai");
                 System.out.println("4. Pending");
                 System.out.println("5. Ditolak");
-                int statusBaru = bacaAngka("Pilih status baru : ");
-
+                System.out.print("Pilih status baru : ");
+                statusBaru = scanner.nextInt();
+                scanner.nextLine(); 
+                
+//Menambahkan case 'pending'
                 switch (statusBaru) {
-                    case 1 -> {
+                    case 1:
                         complain.status = "Dikirim";
-                        complain.remark = null;
-                    }
-                    case 2 -> {
+                        break;
+                    case 2:
                         complain.status = "Diproses";
-                        complain.remark = null;
-                    }
-                    case 3 -> {
+                        break;
+                    case 3:
                         complain.status = "Selesai";
-                        complain.remark = null;
-                        complain.selesai = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                    }
-                    case 4 -> complain.status = "Pending";
-                    case 5 -> complain.status = "Ditolak";
-                    default -> {
+                        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        complain.selesai = timestamp;
+                        break;
+                    case 4:
+                        complain.status = "Pending";
+                        break;
+                    case 5:
+                        complain.status = "Ditolak";
+                        break;
+                    default:
                         System.out.println("Status tidak valid. Status tidak diperbarui.\n");
                         return;
-                    }
                 }
-
+ //Menambahkan logic remark untuk case 'pending' dan 'ditolak               
                 if (statusBaru == 4 || statusBaru == 5) {
-                    System.out.print("Tuliskan alasan : ");
+                    System.out.println("Tuliskan alasan : ");
                     complain.remark = scanner.nextLine();
                 }
-
+                
                 System.out.println("Status pengaduan berhasil diperbarui.\n");
-                complain.updateTerakhir = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                complain.updateTerakhir = timestamp;
                 found = true;
                 break;
             }
@@ -404,6 +363,7 @@ public class OCMSMini {
         }
     }
 
+//Menambahkan deklarasi int pending    
     static void statistikPengaduan() {
         int dikirim = 0;
         int diproses = 0;
@@ -411,6 +371,7 @@ public class OCMSMini {
         int pending = 0;
         int ditolak = 0;
 
+//Menambahkan case pending        
         for (Complain complain : complains) {
             switch (complain.status) {
                 case "Dikirim" -> dikirim++;
@@ -421,6 +382,7 @@ public class OCMSMini {
             }
         }
 
+//Menambahkan status pending        
         System.out.println("===== Statistik Pengaduan =====");
         int totalPengaduan = complains.size();
         System.out.println("Total Pengaduan: " + totalPengaduan);
@@ -429,6 +391,6 @@ public class OCMSMini {
         System.out.println("Selesai: " + selesai);
         System.out.println("Pending: " + pending);
         System.out.println("Ditolak: " + ditolak);
-        System.out.println();
+        System.out.println("\n");
     }
 }
